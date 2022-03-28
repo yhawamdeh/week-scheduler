@@ -31,4 +31,4 @@ THEN the saved events persist
 
 The following animation demonstrates the application functionality:
 
-(./Assets/schedule.png)
+(/Assets/shcedule.png)
