@@ -1,4 +1,4 @@
-const timeOfDay = ["nine", "ten", "eleven", "twelve", "one", "two", "three", "four", "five"]
+const timeOfDay = Array.from(document.getElementsByClassName('saveBtn')).map(time => time.id);
 
 document.addEventListener("click", function(event) {
     event.preventDefault();
@@ -12,40 +12,38 @@ document.addEventListener("click", function(event) {
 function setSchedule() {
     timeOfDay.map(function(time){
         const timeValue = localStorage.getItem(time);
-        console.log(timeValue);
         document.getElementById(`${time}-text`).value = timeValue;
     })
 }
-setSchedule();
+
+function convertTime(time) {
+    if(time < 9) {
+        return time + 12
+    } else {
+        return time
+    }
+}
 
 function scheduleTimeofDay() {
-    console.log("random")
+    const date = new Date().getHours() //toLocaleTimeString([], {hour: "numeric"})
+    const hour = parseInt(date)
+    const times = Array.from(document.getElementsByClassName('time-string'))
+    times.map(time => {
+        const timeHour = convertTime(parseInt(time.innerHTML))
+        if (timeHour < hour) {
+            time.classList.add('past');
+        } else if (timeHour === hour) {
+            time.classList.add('present')
+        } else {
+            time.classList.add('future');
+        }
+    })
 }
 
 function callEveryHour() {
+    scheduleTimeofDay();
     setInterval(scheduleTimeofDay, 1000*60*60)
 }
-callEveryHour()
 
-const timeBlocks = Array.from(document.getElementsByClassName('description'));
-// assigning timeBlocks based on time.
-
-for (let i = 0; i < timeBlocks.length; i++) {
-
-    //  gets the current hour to connect the color changing feature in the text area element based on the 24hr format.
-    const t = new Date().getHours();
-
-    // converts timeBlocks 'id' into an integer.
-    let timeBlocksId = parseInt(timeBlocks[i].id);
-    // convert hour into an integer.
-    let now = parseInt(t);
-
-    //  if statement's to change the color of the blocks based on time using the 24hr time format.
-    if (timeBlocksId < now) {
-        timeBlocks[i].classList.add('past');
-    } else if (timeBlocksId === now) {
-        timeBlocks[i].classList.add('present')
-    } else {
-        timeBlocks[i].classList.add('future');
-    }
-};
+setSchedule();
+callEveryHour();
