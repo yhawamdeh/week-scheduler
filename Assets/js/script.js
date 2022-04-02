@@ -27,15 +27,16 @@ function convertTime(time) {
 function scheduleTimeofDay() {
     const date = new Date().getHours() //toLocaleTimeString([], {hour: "numeric"})
     const hour = parseInt(date)
-    const times = Array.from(document.getElementsByClassName('time-string'))
-    times.map(time => {
-        const timeHour = convertTime(parseInt(time.innerHTML))
+    const times = $('.time-string')
+    times.each(function() {
+        const timeHour = convertTime(parseInt($(this).attr('time')))
+        console.log(timeHour)
         if (timeHour < hour) {
-            time.classList.add('past');
+            $(this).addClass('past');
         } else if (timeHour === hour) {
-            time.classList.add('present')
-        } else {
-            time.classList.add('future');
+            $(this).addClass('present');
+        } else  {
+            $(this).addClass('future');
         }
     })
 }
